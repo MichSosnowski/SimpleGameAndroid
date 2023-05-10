@@ -7,17 +7,23 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements SensorEventListener {
 
     private LinearLayout gameLinearLayout;
     private GameView gameView;
     private ArrayList<String> shapes;
+    private SensorManager sensorManager;
+    private Sensor accelSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,29 @@ public class GameActivity extends AppCompatActivity {
         gameView = new GameView(this);
         gameView.setShapes(shapes);
         gameLinearLayout.addView(gameView);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
+
+    protected void onResume() {
+        super.onResume();
+        if (accelSensor != null)
+            sensorManager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        if (accelSensor != null)
+            sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {}
 }
 
 class GameView extends View {
@@ -69,6 +97,11 @@ class GameView extends View {
             canvas.drawColor(Color.WHITE);
             float x0, y0, x1, y1, radius;
             int color;
+            String[] start;
+            if (shapes.get(0).startsWith(String.valueOf(START_TEXT))) start = shapes.get(0).split(":");
+            else start = shapes.get(1).split(":");
+            shapes.add(CIRCLE + ":" + start[1] + ":" + start[2] + ":" + (Float.parseFloat(start[1]) + 30)
+                    + ":" + (Float.parseFloat(start[2]) + 30) + ":" + Color.BLACK);
             for (String shape : shapes) {
                 String[] infos = shape.split(":");
                 x0 = Float.parseFloat(infos[1]);
