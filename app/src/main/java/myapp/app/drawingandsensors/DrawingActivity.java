@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,7 +12,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,9 +24,16 @@ public class DrawingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawing);
-        mainLinearLayout = findViewById(R.id.mainLinearLayout);
+        mainLinearLayout = findViewById(R.id.drawingLinearLayout);
         myDrawing = new MyDrawing(this);
         mainLinearLayout.addView(myDrawing);
+    }
+
+    public void onBackPressed() {
+        Intent returnResult = new Intent();
+        returnResult.putStringArrayListExtra("shapes", myDrawing.getShapes());
+        setResult(RESULT_OK, returnResult);
+        super.onBackPressed();
     }
 
     public void chooseShape(View view) {

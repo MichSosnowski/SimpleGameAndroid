@@ -13,6 +13,9 @@
         android:theme="@style/Theme.DrawingAndSensors"
         tools:targetApi="31">
         <activity
+            android:name=".GameActivity"
+            android:exported="false" />
+        <activity
             android:name=".DrawingActivity"
             android:exported="false" />
         <activity
