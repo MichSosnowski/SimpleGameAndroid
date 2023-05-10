@@ -10,4 +10,6 @@
     <string name="red">red</string>
     <string name="green">green</string>
     <string name="blue">blue</string>
+    <string name="start">start</string>
+    <string name="end">end</string>
 </resources>

@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class DrawingActivity extends AppCompatActivity {
 
     private LinearLayout mainLinearLayout;
     private MyDrawing myDrawing;
+    private ImageButton startButton;
+    private ImageButton endButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class DrawingActivity extends AppCompatActivity {
         mainLinearLayout = findViewById(R.id.drawingLinearLayout);
         myDrawing = new MyDrawing(this);
         mainLinearLayout.addView(myDrawing);
+        startButton = findViewById(R.id.start);
+        endButton = findViewById(R.id.end);
     }
 
     public void onBackPressed() {
@@ -43,8 +48,16 @@ public class DrawingActivity extends AppCompatActivity {
         else if (view.getId() == R.id.rectangle) {
             myDrawing.setChosenShape(MyDrawing.RECTANGLE);
         }
-        else {
+        else if (view.getId() == R.id.line) {
             myDrawing.setChosenShape(MyDrawing.LINE);
+        }
+        else if (view.getId() == R.id.start) {
+            myDrawing.setChosenShape(MyDrawing.START_TEXT);
+            startButton.setEnabled(false);
+        }
+        else {
+            myDrawing.setChosenShape(MyDrawing.END_TEXT);
+            endButton.setEnabled(false);
         }
     }
 
@@ -89,9 +102,12 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
     public final static int RECTANGLE = 1;
     public final static int CIRCLE = 2;
     public final static int LINE = 3;
+    public final static int START_TEXT = 4;
+    public final static int END_TEXT = 5;
 
     private ArrayList<String> shapes;
     private Paint defaultStyle;
+    private Paint textStyle;
 
     // current drawn figure
     private float xinit, yinit, xcurrent, ycurrent;
@@ -122,6 +138,12 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
                 case LINE:
                     canvas.drawLine(x0, y0, x1, y1, defaultStyle);
                     break;
+                case START_TEXT:
+                    canvas.drawText("S", x0, y0, textStyle);
+                    break;
+                case END_TEXT:
+                    canvas.drawText("E", x0, y0, textStyle);
+                    break;
             }
         }
         if (currentDrawing) {
@@ -136,6 +158,12 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
                     break;
                 case LINE:
                     canvas.drawLine(xinit, yinit, xcurrent, ycurrent, defaultStyle);
+                    break;
+                case START_TEXT:
+                    canvas.drawText("S", xinit, yinit, textStyle);
+                    break;
+                case END_TEXT:
+                    canvas.drawText("E", xinit, yinit, textStyle);
                     break;
             }
         }
@@ -153,6 +181,11 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
         defaultStyle.setStrokeWidth(10);
         defaultStyle.setAntiAlias(true);
         defaultStyle.setColor(Color.RED);
+        textStyle = new Paint();
+        textStyle.setStrokeWidth(10);
+        textStyle.setAntiAlias(true);
+        textStyle.setColor(Color.BLACK);
+        textStyle.setTextSize(100);
         setOnClickListener(this);
         setOnTouchListener(this);
     }
@@ -160,18 +193,35 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
     @Override
     public void onClick(View view) {
         String newShape = "";
+        int lastShape = 0;
         switch(chosenShape) {
             case RECTANGLE:
                 newShape = RECTANGLE + ":" + xinit + ":" + yinit + ":" + xcurrent + ":" + ycurrent + ":" + chosenColor;
+                shapes.add(newShape);
                 break;
             case CIRCLE:
                 newShape = CIRCLE+":"+ xinit + ":" + yinit + ":"+xcurrent+":"+ycurrent+":"+chosenColor;
+                shapes.add(newShape);
                 break;
             case LINE:
                 newShape = LINE + ":" + xinit + ":" + yinit + ":" + xcurrent + ":" + ycurrent + ":" + chosenColor;
+                shapes.add(newShape);
+                break;
+            case START_TEXT:
+                newShape = START_TEXT + ":" + xinit + ":" + yinit + ":0:0:0";
+                shapes.add(0, newShape);
+                lastShape = Integer.parseInt(shapes.get(shapes.size() - 1).split(":")[0]);
+                if (lastShape != START_TEXT && lastShape != END_TEXT) setChosenShape(lastShape);
+                else setChosenShape(RECTANGLE);
+                break;
+            case END_TEXT:
+                newShape = END_TEXT + ":" + xinit + ":" + yinit + ":0:0:0";
+                shapes.add(0, newShape);
+                lastShape = Integer.parseInt(shapes.get(shapes.size() - 1).split(":")[0]);
+                if (lastShape != START_TEXT && lastShape != END_TEXT) setChosenShape(lastShape);
+                else setChosenShape(RECTANGLE);
                 break;
         }
-        shapes.add(newShape);
         currentDrawing = false;
     }
 
@@ -192,7 +242,7 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
     }
 
     public void undo() {
-        if(shapes.size() > 0)
+        if(shapes.size() > 2)
             shapes.remove(shapes.size() - 1);
         invalidate();
     }

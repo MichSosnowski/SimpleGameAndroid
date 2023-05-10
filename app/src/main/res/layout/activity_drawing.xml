@@ -75,6 +75,24 @@
             android:contentDescription="@string/blue"
             android:onClick="chooseColor" />
 
+        <ImageButton
+            android:id="@+id/start"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/start"
+            android:contentDescription="@string/start"
+            android:onClick="chooseShape" />
+
+        <ImageButton
+            android:id="@+id/end"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/end"
+            android:contentDescription="@string/end"
+            android:onClick="chooseShape" />
+
     </LinearLayout>
 
 </LinearLayout>
