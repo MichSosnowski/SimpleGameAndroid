@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DrawingAndSensors</string>
+    <string name="drawing">Drawing</string>
+    <string name="game">Game</string>
+    <string name="quit">Quit</string>
+    <string name="circle">circle</string>
+    <string name="rectangle">rectangle</string>
+    <string name="line">line</string>
+    <string name="undo">undo</string>
+    <string name="red">red</string>
+    <string name="green">green</string>
+    <string name="blue">blue</string>
+</resources>

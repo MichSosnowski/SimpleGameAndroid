@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DrawingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <ImageButton
+            android:id="@+id/circle"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/circle"
+            android:onClick="chooseShape"/>
+
+        <ImageButton
+            android:id="@+id/rectangle"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/rectangle"
+            android:contentDescription="@string/rectangle"
+            android:onClick="chooseShape" />
+
+        <ImageButton
+            android:id="@+id/line"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/line"
+            android:contentDescription="@string/line"
+            android:onClick="chooseShape" />
+
+        <ImageButton
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/undo"
+            android:contentDescription="@string/undo"
+            android:onClick="undo" />
+
+        <ImageButton
+            android:id="@+id/red"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/red"
+            android:contentDescription="@string/red"
+            android:onClick="chooseColor" />
+
+        <ImageButton
+            android:id="@+id/green"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/green"
+            android:contentDescription="@string/green"
+            android:onClick="chooseColor" />
+
+        <ImageButton
+            android:id="@+id/blue"
+            android:layout_width="@dimen/size"
+            android:layout_height="@dimen/size"
+            android:layout_margin="@dimen/margin"
+            android:background="@drawable/blue"
+            android:contentDescription="@string/blue"
+            android:onClick="chooseColor" />
+
+    </LinearLayout>
+
+</LinearLayout>
