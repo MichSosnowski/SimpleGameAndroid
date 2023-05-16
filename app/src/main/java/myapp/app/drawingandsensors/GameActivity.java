@@ -57,8 +57,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         int yacc = (int) sensorEvent.values[1];
         String[] shape = shapes.get(shapes.size() - 1).split(":");
         shapes.remove(shapes.size() - 1);
-        shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) + xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
-                + ":" + (Float.parseFloat(shape[1]) + xacc + 30) + ":" + (Float.parseFloat(shape[2]) - yacc - 30)
+        shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) - xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
+                + ":" + (Float.parseFloat(shape[1]) - xacc + 30) + ":" + (Float.parseFloat(shape[2]) + yacc + 30)
                 + ":" + Color.BLACK);
         gameView.invalidate();
     }
