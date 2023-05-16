@@ -107,9 +107,9 @@ class GameView extends View {
     public boolean moveBall(int xacc, int yacc, int width, int height) {
         String[] shape = shapes.get(shapes.size() - 1).split(":");
         // there is a ball in the end point
-        if (((Float.parseFloat(shape[1]) - xacc + 30) >= endX && (Float.parseFloat(shape[2]) + yacc + 30) >= endY)
-           && ((Float.parseFloat(shape[1]) - xacc + 30) <= endX + 100 && (Float.parseFloat(shape[2]) + yacc + 30) <= endY + 100)) {
-            return true;
+        if ((((Float.parseFloat(shape[1]) - xacc + 30) >= endX) && ((Float.parseFloat(shape[1]) - xacc + 30) <= endX + 100))
+           && (((Float.parseFloat(shape[2]) + yacc + 30) >= endY) && ((Float.parseFloat(shape[2]) + yacc + 30) <= endY + 100))) {
+           return true;
         }
         // there is not a ball in the end point but it should be displayed on the screen
         else if (((Float.parseFloat(shape[1]) - xacc + 30) > 60 && (Float.parseFloat(shape[1]) - xacc + 30) < width)
@@ -137,7 +137,7 @@ class GameView extends View {
             if (shapes.get(0).startsWith(String.valueOf(START_TEXT)))
                 start = shapes.get(0).split(":");
             else start = shapes.get(1).split(":");
-            shapes.add(CIRCLE + ":" + (start[1] + 100) + ":" + (start[2] + 100) + ":" + (Float.parseFloat(start[1]) + 30)
+            shapes.add(CIRCLE + ":" + start[1] + ":" + start[2] + ":" + (Float.parseFloat(start[1]) + 30)
                     + ":" + (Float.parseFloat(start[2]) + 30) + ":" + Color.BLACK);
             firstDrawing = false;
         }
