@@ -22,6 +22,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     private LinearLayout gameLinearLayout;
     private GameView gameView;
     private ArrayList<String> shapes;
+    private int width;
+    private int height;
     private SensorManager sensorManager;
     private Sensor accelSensor;
 
@@ -37,6 +39,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         gameLinearLayout.addView(gameView);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gameView.post(() -> {
+            width = gameLinearLayout.getWidth();
+            height = gameLinearLayout.getHeight();
+        });
     }
 
     protected void onResume() {
@@ -53,9 +59,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        int xacc = (int) sensorEvent.values[0];
-        int yacc = (int) sensorEvent.values[1];
-        gameView.moveBall(xacc, yacc);
+        int xacc = (int) (2 * sensorEvent.values[0]);
+        int yacc = (int) (2 * sensorEvent.values[1]);
+        gameView.moveBall(xacc, yacc, width, height);
     }
 
     @Override
@@ -89,13 +95,18 @@ class GameView extends View {
         textStyle.setTextSize(100);
     }
 
-    public void moveBall(int xacc, int yacc) {
+    public void moveBall(int xacc, int yacc, int width, int height) {
         String[] shape = shapes.get(shapes.size() - 1).split(":");
-        shapes.remove(shapes.size() - 1);
-        shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) - xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
-                + ":" + (Float.parseFloat(shape[1]) - xacc + 30) + ":" + (Float.parseFloat(shape[2]) + yacc + 30)
-                + ":" + Color.BLACK);
-        invalidate();
+        System.out.println("Wysokosc: " + height);
+        System.out.println((Float.parseFloat(shape[1]) + yacc + 30));
+        if (((Float.parseFloat(shape[1]) - xacc + 30) > 60 && (Float.parseFloat(shape[1]) - xacc + 30) < width)
+            && ((Float.parseFloat(shape[2]) + yacc + 30) > 60 && (Float.parseFloat(shape[2]) + yacc + 30) < height)) {
+            shapes.remove(shapes.size() - 1);
+            shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) - xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
+                    + ":" + (Float.parseFloat(shape[1]) - xacc + 30) + ":" + (Float.parseFloat(shape[2]) + yacc + 30)
+                    + ":" + Color.BLACK);
+            invalidate();
+        }
     }
 
     public void setShapes(ArrayList<String> shapes) {
