@@ -53,7 +53,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-
+        int xacc = (int) sensorEvent.values[0];
+        int yacc = (int) sensorEvent.values[1];
+        String[] shape = shapes.get(shapes.size() - 1).split(":");
+        shapes.remove(shapes.size() - 1);
+        shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) + xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
+                + ":" + (Float.parseFloat(shape[1]) + xacc + 30) + ":" + (Float.parseFloat(shape[2]) - yacc - 30)
+                + ":" + Color.BLACK);
+        gameView.invalidate();
     }
 
     @Override
@@ -93,43 +100,44 @@ class GameView extends View {
     }
 
     public void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.WHITE);
+        float x0, y0, x1, y1, radius;
+        int color;
+        String[] start;
         if (firstDrawing) {
-            canvas.drawColor(Color.WHITE);
-            float x0, y0, x1, y1, radius;
-            int color;
-            String[] start;
-            if (shapes.get(0).startsWith(String.valueOf(START_TEXT))) start = shapes.get(0).split(":");
+            if (shapes.get(0).startsWith(String.valueOf(START_TEXT)))
+                start = shapes.get(0).split(":");
             else start = shapes.get(1).split(":");
             shapes.add(CIRCLE + ":" + start[1] + ":" + start[2] + ":" + (Float.parseFloat(start[1]) + 30)
                     + ":" + (Float.parseFloat(start[2]) + 30) + ":" + Color.BLACK);
-            for (String shape : shapes) {
-                String[] infos = shape.split(":");
-                x0 = Float.parseFloat(infos[1]);
-                y0 = Float.parseFloat(infos[2]);
-                x1 = Float.parseFloat(infos[3]);
-                y1 = Float.parseFloat(infos[4]);
-                color = Integer.parseInt(infos[5]);
-                defaultStyle.setColor(color);
-                switch (Integer.parseInt(infos[0])) {
-                    case RECTANGLE:
-                        canvas.drawRect(x0, y0, x1, y1, defaultStyle);
-                        break;
-                    case CIRCLE:
-                        radius = (float) distance(x0, y0, x1, y1);
-                        canvas.drawCircle(x0, y0, radius, defaultStyle);
-                        break;
-                    case LINE:
-                        canvas.drawLine(x0, y0, x1, y1, defaultStyle);
-                        break;
-                    case START_TEXT:
-                        canvas.drawText("S", x0, y0, textStyle);
-                        break;
-                    case END_TEXT:
-                        canvas.drawText("E", x0, y0, textStyle);
-                        break;
-                }
-            }
             firstDrawing = false;
+        }
+        for (String shape : shapes) {
+            String[] infos = shape.split(":");
+            x0 = Float.parseFloat(infos[1]);
+            y0 = Float.parseFloat(infos[2]);
+            x1 = Float.parseFloat(infos[3]);
+            y1 = Float.parseFloat(infos[4]);
+            color = Integer.parseInt(infos[5]);
+            defaultStyle.setColor(color);
+            switch (Integer.parseInt(infos[0])) {
+                case RECTANGLE:
+                    canvas.drawRect(x0, y0, x1, y1, defaultStyle);
+                    break;
+                case CIRCLE:
+                    radius = (float) distance(x0, y0, x1, y1);
+                    canvas.drawCircle(x0, y0, radius, defaultStyle);
+                    break;
+                case LINE:
+                    canvas.drawLine(x0, y0, x1, y1, defaultStyle);
+                    break;
+                case START_TEXT:
+                    canvas.drawText("S", x0, y0, textStyle);
+                    break;
+                case END_TEXT:
+                    canvas.drawText("E", x0, y0, textStyle);
+                    break;
+            }
         }
     }
 

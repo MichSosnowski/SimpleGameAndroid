@@ -75,6 +75,20 @@ public class DrawingActivity extends AppCompatActivity {
 
     public void undo(View view) {
         myDrawing.undo();
+        setButtons();
+    }
+
+    private void setButtons() {
+        ArrayList<String> shapes = myDrawing.getShapes();
+        if (shapes.size() == 0) {
+            startButton.setEnabled(true);
+            endButton.setEnabled(true);
+        }
+        else if (shapes.size() == 1) {
+            String startOrEndPoint = shapes.get(0).split(":")[0];
+            if (startOrEndPoint.equals(String.valueOf(MyDrawing.START_TEXT))) endButton.setEnabled(true);
+            else startButton.setEnabled(true);
+        }
     }
 
     // --------------- life cycle management --------------
@@ -242,9 +256,10 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
     }
 
     public void undo() {
-        if(shapes.size() > 2)
+        if(shapes.size() > 0) {
             shapes.remove(shapes.size() - 1);
-        invalidate();
+            invalidate();
+        }
     }
 
     public int getChosenShape() {
