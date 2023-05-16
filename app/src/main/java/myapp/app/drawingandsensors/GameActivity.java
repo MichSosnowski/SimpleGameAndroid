@@ -14,6 +14,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -57,11 +58,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             sensorManager.unregisterListener(this);
     }
 
+    private void gameOver() {
+        Toast.makeText(this, "You won!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         int xacc = (int) (2 * sensorEvent.values[0]);
         int yacc = (int) (2 * sensorEvent.values[1]);
-        gameView.moveBall(xacc, yacc, width, height);
+        boolean result = gameView.moveBall(xacc, yacc, width, height);
+        if (result) gameOver();
     }
 
     @Override
@@ -80,6 +87,8 @@ class GameView extends View {
     private Paint defaultStyle;
     private Paint textStyle;
     private boolean firstDrawing = true;
+    private float startX, startY;
+    private float endX, endY;
 
     public GameView(Context context) {
         super(context);
@@ -95,11 +104,15 @@ class GameView extends View {
         textStyle.setTextSize(100);
     }
 
-    public void moveBall(int xacc, int yacc, int width, int height) {
+    public boolean moveBall(int xacc, int yacc, int width, int height) {
         String[] shape = shapes.get(shapes.size() - 1).split(":");
-        System.out.println("Wysokosc: " + height);
-        System.out.println((Float.parseFloat(shape[1]) + yacc + 30));
-        if (((Float.parseFloat(shape[1]) - xacc + 30) > 60 && (Float.parseFloat(shape[1]) - xacc + 30) < width)
+        // there is a ball in the end point
+        if (((Float.parseFloat(shape[1]) - xacc + 30) >= endX && (Float.parseFloat(shape[2]) + yacc + 30) >= endY)
+           && ((Float.parseFloat(shape[1]) - xacc + 30) <= endX + 100 && (Float.parseFloat(shape[2]) + yacc + 30) <= endY + 100)) {
+            return true;
+        }
+        // there is not a ball in the end point but it should be displayed on the screen
+        else if (((Float.parseFloat(shape[1]) - xacc + 30) > 60 && (Float.parseFloat(shape[1]) - xacc + 30) < width)
             && ((Float.parseFloat(shape[2]) + yacc + 30) > 60 && (Float.parseFloat(shape[2]) + yacc + 30) < height)) {
             shapes.remove(shapes.size() - 1);
             shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) - xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
@@ -107,6 +120,7 @@ class GameView extends View {
                     + ":" + Color.BLACK);
             invalidate();
         }
+        return false;
     }
 
     public void setShapes(ArrayList<String> shapes) {
@@ -123,7 +137,7 @@ class GameView extends View {
             if (shapes.get(0).startsWith(String.valueOf(START_TEXT)))
                 start = shapes.get(0).split(":");
             else start = shapes.get(1).split(":");
-            shapes.add(CIRCLE + ":" + start[1] + ":" + start[2] + ":" + (Float.parseFloat(start[1]) + 30)
+            shapes.add(CIRCLE + ":" + (start[1] + 100) + ":" + (start[2] + 100) + ":" + (Float.parseFloat(start[1]) + 30)
                     + ":" + (Float.parseFloat(start[2]) + 30) + ":" + Color.BLACK);
             firstDrawing = false;
         }
@@ -148,9 +162,13 @@ class GameView extends View {
                     break;
                 case START_TEXT:
                     canvas.drawText("S", x0, y0, textStyle);
+                    startX = x0;
+                    startY = y0;
                     break;
                 case END_TEXT:
                     canvas.drawText("E", x0, y0, textStyle);
+                    endX = x0;
+                    endY = y0;
                     break;
             }
         }
