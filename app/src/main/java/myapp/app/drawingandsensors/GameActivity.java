@@ -55,12 +55,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent sensorEvent) {
         int xacc = (int) sensorEvent.values[0];
         int yacc = (int) sensorEvent.values[1];
-        String[] shape = shapes.get(shapes.size() - 1).split(":");
-        shapes.remove(shapes.size() - 1);
-        shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) - xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
-                + ":" + (Float.parseFloat(shape[1]) - xacc + 30) + ":" + (Float.parseFloat(shape[2]) + yacc + 30)
-                + ":" + Color.BLACK);
-        gameView.invalidate();
+        gameView.moveBall(xacc, yacc);
     }
 
     @Override
@@ -92,6 +87,15 @@ class GameView extends View {
         textStyle.setAntiAlias(true);
         textStyle.setColor(Color.BLACK);
         textStyle.setTextSize(100);
+    }
+
+    public void moveBall(int xacc, int yacc) {
+        String[] shape = shapes.get(shapes.size() - 1).split(":");
+        shapes.remove(shapes.size() - 1);
+        shapes.add(GameView.CIRCLE + ":" + (Float.parseFloat(shape[1]) - xacc) + ":" + (Float.parseFloat(shape[2]) + yacc)
+                + ":" + (Float.parseFloat(shape[1]) - xacc + 30) + ":" + (Float.parseFloat(shape[2]) + yacc + 30)
+                + ":" + Color.BLACK);
+        invalidate();
     }
 
     public void setShapes(ArrayList<String> shapes) {
