@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -87,8 +88,8 @@ class GameView extends View {
     private Paint defaultStyle;
     private Paint textStyle;
     private boolean firstDrawing = true;
-    private float startX, startY;
-    private float endX, endY;
+    private int startX, startY;
+    private int endX, endY;
 
     public GameView(Context context) {
         super(context);
@@ -106,9 +107,13 @@ class GameView extends View {
 
     public boolean moveBall(int xacc, int yacc, int width, int height) {
         String[] shape = shapes.get(shapes.size() - 1).split(":");
+        Rect textBounds = new Rect();
+        textStyle.getTextBounds("E", 0, 1, textBounds);
         // there is a ball in the end point
-        if ((((Float.parseFloat(shape[1]) - xacc + 30) >= endX) && ((Float.parseFloat(shape[1]) - xacc + 30) <= endX + 100))
-           && (((Float.parseFloat(shape[2]) + yacc + 30) >= endY) && ((Float.parseFloat(shape[2]) + yacc + 30) <= endY + 100))) {
+        if (((Float.parseFloat(shape[1]) - xacc + 30) >= endX + 6 + textBounds.left
+           && (Float.parseFloat(shape[1]) - xacc + 30) <= endX + 6 + textBounds.right)
+           && ((Float.parseFloat(shape[2]) + yacc + 30) >= endY + 6 + textBounds.top
+           && (Float.parseFloat(shape[2]) + yacc + 30) <= endY + 6 + textBounds.bottom)) {
            return true;
         }
         // there is not a ball in the end point but it should be displayed on the screen
@@ -162,13 +167,13 @@ class GameView extends View {
                     break;
                 case START_TEXT:
                     canvas.drawText("S", x0, y0, textStyle);
-                    startX = x0;
-                    startY = y0;
+                    startX = (int) x0;
+                    startY = (int) y0;
                     break;
                 case END_TEXT:
                     canvas.drawText("E", x0, y0, textStyle);
-                    endX = x0;
-                    endY = y0;
+                    endX = (int) x0;
+                    endY = (int) y0;
                     break;
             }
         }
