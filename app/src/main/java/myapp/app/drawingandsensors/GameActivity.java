@@ -132,9 +132,36 @@ class GameView extends View {
                         return false;
                     }
                     break;
-                //case LINE:
-                //    canvas.drawLine(x0, y0, x1, y1, defaultStyle);
-                //    break;
+                case LINE:
+                    // calculating distance a, b, c
+                    float a = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y0);
+                    float b = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x1, y1);
+                    float c = (float) distance(x0, y0, x1, y1);
+                    // calculating t
+                    float t = (a * a - b * b + c * c) / (2 * c * c);
+                    // calculating distance d
+                    float d = (float) Math.sqrt(a * a - t * t * c * c);
+                    // the intersection point is outside of the segment
+                    if (t < 0 || t > 1) {
+                        if (a <= 30 || b <= 30) {
+                            shapes.remove(shapes.size() - 1);
+                            shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                    + ":" + (startX + 30) + ":" + (startY + 30)
+                                    + ":" + Color.BLACK);
+                            invalidate();
+                            return false;
+                        }
+                    }
+                    // if distance d is less than or equal to 30 (length of the ball radius) - collision
+                    else if (d <= 30) {
+                        shapes.remove(shapes.size() - 1);
+                        shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                + ":" + (startX + 30) + ":" + (startY + 30)
+                                + ":" + Color.BLACK);
+                        invalidate();
+                        return false;
+                    }
+                    break;
             }
         }
         // there is a ball in the end point
