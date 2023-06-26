@@ -109,6 +109,34 @@ class GameView extends View {
         String[] shape = shapes.get(shapes.size() - 1).split(":");
         Rect textBounds = new Rect();
         textStyle.getTextBounds("E", 0, 1, textBounds);
+        // check if there is a collision between a ball and an obstacle
+        float x0, y0, x1, y1, radius;
+        for (int i = 2; i < shapes.size() - 1; i++) {
+            String[] infos = shapes.get(i).split(":");
+            x0 = Float.parseFloat(infos[1]);
+            y0 = Float.parseFloat(infos[2]);
+            x1 = Float.parseFloat(infos[3]);
+            y1 = Float.parseFloat(infos[4]);
+            switch (Integer.parseInt(infos[0])) {
+                //case RECTANGLE:
+                //    canvas.drawRect(x0, y0, x1, y1, defaultStyle);
+                //    break;
+                case CIRCLE:
+                    radius = (float) distance(x0, y0, x1, y1);
+                    if (distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y0) <= radius + 30) {
+                        shapes.remove(shapes.size() - 1);
+                        shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                + ":" + (startX + 30) + ":" + (startY + 30)
+                                + ":" + Color.BLACK);
+                        invalidate();
+                        return false;
+                    }
+                    break;
+                //case LINE:
+                //    canvas.drawLine(x0, y0, x1, y1, defaultStyle);
+                //    break;
+            }
+        }
         // there is a ball in the end point
         if (((Float.parseFloat(shape[1]) - xacc + 30) >= endX + 6 + textBounds.left
            && (Float.parseFloat(shape[1]) - xacc + 30) <= endX + 6 + textBounds.right)
