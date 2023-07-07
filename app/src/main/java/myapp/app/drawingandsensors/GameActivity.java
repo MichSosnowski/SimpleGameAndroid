@@ -118,9 +118,116 @@ class GameView extends View {
             x1 = Float.parseFloat(infos[3]);
             y1 = Float.parseFloat(infos[4]);
             switch (Integer.parseInt(infos[0])) {
-                //case RECTANGLE:
-                //    canvas.drawRect(x0, y0, x1, y1, defaultStyle);
-                //    break;
+                case RECTANGLE:
+                    float a_top = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y0);
+                    float b_top = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x1, y0);
+                    float top = (float) distance(x0, y0, x1, y0);
+                    // calculating t
+                    float t_top = (a_top * a_top - b_top * b_top + top * top) / (2 * top * top);
+                    // calculating distance d_top
+                    float d_top = (float) Math.sqrt(a_top * a_top - t_top * t_top * top * top);
+                    // the intersection point is outside of the segment
+                    if (t_top < 0 || t_top > 1) {
+                        if (a_top <= 30 || b_top <= 30) {
+                            shapes.remove(shapes.size() - 1);
+                            shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                    + ":" + (startX + 30) + ":" + (startY + 30)
+                                    + ":" + Color.BLACK);
+                            invalidate();
+                            return false;
+                        }
+                    }
+                    // if distance d is less than or equal to 30 (length of the ball radius) - collision
+                    else if (d_top <= 30) {
+                        shapes.remove(shapes.size() - 1);
+                        shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                + ":" + (startX + 30) + ":" + (startY + 30)
+                                + ":" + Color.BLACK);
+                        invalidate();
+                        return false;
+                    }
+                    float a_left = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y0);
+                    float b_left = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y1);
+                    float left = (float) distance(x0, y0, x0, y1);
+                    // calculating t_left
+                    float t_left = (a_left * a_left - b_left * b_left + left * left) / (2 * left * left);
+                    // calculating distance d_left
+                    float d_left = (float) Math.sqrt(a_left * a_left - t_left * t_left * left * left);
+                    // the intersection point is outside of the segment
+                    if (t_left < 0 || t_left > 1) {
+                        if (a_left <= 30 || b_left <= 30) {
+                            shapes.remove(shapes.size() - 1);
+                            shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                    + ":" + (startX + 30) + ":" + (startY + 30)
+                                    + ":" + Color.BLACK);
+                            invalidate();
+                            return false;
+                        }
+                    }
+                    // if distance d is less than or equal to 30 (length of the ball radius) - collision
+                    else if (d_left <= 30) {
+                        shapes.remove(shapes.size() - 1);
+                        shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                + ":" + (startX + 30) + ":" + (startY + 30)
+                                + ":" + Color.BLACK);
+                        invalidate();
+                        return false;
+                    }
+                    float a_right = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x1, y0);
+                    float b_right = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x1, y1);
+                    float right = (float) distance(x1, y0, x1, y1);
+                    // calculating t_right
+                    float t_right = (a_right * a_right - b_right * b_right + right * right) / (2 * right * right);
+                    // calculating distance d_right
+                    float d_right = (float) Math.sqrt(a_right * a_right - t_right * t_right * right * right);
+                    // the intersection point is outside of the segment
+                    if (t_right < 0 || t_right > 1) {
+                        if (a_right <= 30 || b_right <= 30) {
+                            shapes.remove(shapes.size() - 1);
+                            shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                    + ":" + (startX + 30) + ":" + (startY + 30)
+                                    + ":" + Color.BLACK);
+                            invalidate();
+                            return false;
+                        }
+                    }
+                    // if distance d is less than or equal to 30 (length of the ball radius) - collision
+                    else if (d_right <= 30) {
+                        shapes.remove(shapes.size() - 1);
+                        shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                + ":" + (startX + 30) + ":" + (startY + 30)
+                                + ":" + Color.BLACK);
+                        invalidate();
+                        return false;
+                    }
+                    float a_bottom = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y1);
+                    float b_bottom = (float) distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x1, y1);
+                    float bottom = (float) distance(x0, y1, x1, y1);
+                    // calculating t_bottom
+                    float t_bottom = (a_bottom * a_bottom - b_bottom * b_bottom + bottom * bottom) / (2 * bottom * bottom);
+                    // calculating distance d_bottom
+                    float d_bottom = (float) Math.sqrt(a_bottom * a_bottom - t_bottom * t_bottom * bottom * bottom);
+                    // the intersection point is outside of the segment
+                    if (t_bottom < 0 || t_bottom > 1) {
+                        if (a_bottom <= 30 || b_bottom <= 30) {
+                            shapes.remove(shapes.size() - 1);
+                            shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                    + ":" + (startX + 30) + ":" + (startY + 30)
+                                    + ":" + Color.BLACK);
+                            invalidate();
+                            return false;
+                        }
+                    }
+                    // if distance d is less than or equal to 30 (length of the ball radius) - collision
+                    else if (d_bottom <= 30) {
+                        shapes.remove(shapes.size() - 1);
+                        shapes.add(GameView.CIRCLE + ":" + (startX) + ":" + (startY)
+                                + ":" + (startX + 30) + ":" + (startY + 30)
+                                + ":" + Color.BLACK);
+                        invalidate();
+                        return false;
+                    }
+                    break;
                 case CIRCLE:
                     radius = (float) distance(x0, y0, x1, y1);
                     if (distance(Float.parseFloat(shape[1]), Float.parseFloat(shape[2]), x0, y0) <= radius + 30) {
