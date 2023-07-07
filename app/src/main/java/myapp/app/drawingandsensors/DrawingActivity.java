@@ -34,6 +34,7 @@ public class DrawingActivity extends AppCompatActivity {
         endButton = findViewById(R.id.end);
     }
 
+    // leave the drawing activity by pressing Back button
     public void onBackPressed() {
         Intent returnResult = new Intent();
         returnResult.putStringArrayListExtra("shapes", myDrawing.getShapes());
@@ -41,6 +42,7 @@ public class DrawingActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    // sets a chosen shape by a user
     public void chooseShape(View view) {
         if (view.getId() == R.id.circle) {
             myDrawing.setChosenShape(MyDrawing.CIRCLE);
@@ -61,6 +63,7 @@ public class DrawingActivity extends AppCompatActivity {
         }
     }
 
+    // sets a chosen color by a user
     public void chooseColor(View view) {
         if (view.getId() == R.id.red) {
             myDrawing.setChosenColor(Color.RED);
@@ -73,11 +76,14 @@ public class DrawingActivity extends AppCompatActivity {
         }
     }
 
+    // undo the last action
     public void undo(View view) {
         myDrawing.undo();
         setButtons();
     }
 
+    // sets buttons: S (start point) and E (end point) to enabled or disabled
+    // it depends on if a user set a start point or an end point on the game board
     private void setButtons() {
         ArrayList<String> shapes = myDrawing.getShapes();
         if (shapes.size() == 0) {
@@ -255,6 +261,7 @@ class MyDrawing extends View implements View.OnClickListener, View.OnTouchListen
         return false;
     }
 
+    // undo the last drawing shape
     public void undo() {
         if(shapes.size() > 0) {
             shapes.remove(shapes.size() - 1);

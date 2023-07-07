@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> shapes;
     private Button gameButton;
 
+    // --------------- life cycle management --------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // launches a new activity for drawing obstacles and start and end points
     public void showDrawing(View view) {
         gameButton.setEnabled(false);
         Intent drawingIntent = new Intent(this, DrawingActivity.class);
         startActivityForResult(drawingIntent, R_CODE);
     }
 
+    // launches a new activity for playing a game
     public void startGame(View view) {
         Intent gameIntent = new Intent(this, GameActivity.class);
         gameIntent.putStringArrayListExtra("shapes", shapes);

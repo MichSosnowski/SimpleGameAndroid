@@ -29,6 +29,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor accelSensor;
 
+    // --------------- life cycle management --------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             sensorManager.unregisterListener(this);
     }
 
+    // shows a Toast message when the game is over
     private void gameOver() {
         Toast.makeText(this, "You won!", Toast.LENGTH_SHORT).show();
         finish();
@@ -105,6 +107,7 @@ class GameView extends View {
         textStyle.setTextSize(100);
     }
 
+    // moves a ball according to sensor parameters
     public boolean moveBall(int xacc, int yacc, int width, int height) {
         String[] shape = shapes.get(shapes.size() - 1).split(":");
         Rect textBounds = new Rect();
